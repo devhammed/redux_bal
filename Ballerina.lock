@@ -1,4 +1,4 @@
 org_name = "devhammed"
-version = "0.1.1"
+version = "0.1.2"
 lockfile_version = "1.0.0"
 ballerina_version = "1.1.3"
