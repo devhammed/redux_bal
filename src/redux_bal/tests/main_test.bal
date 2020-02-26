@@ -9,16 +9,18 @@ type State record {
 function counterReducer(any state, Action action) returns State {
     var s = <State>state;
 
-    if (action.id === "INC") {
-        s["counter"] = s.counter + 1;
-    }
+    match action.id {
+        "INC" => {
+            s["counter"] = s.counter + 1;
+        }
 
-    if (action.id === "DEC") {
-        s["counter"] = s.counter - 1;
-    }
+        "DEC" => {
+            s["counter"] = s.counter - 1;
+        }
 
-    if (action.id === "SET") {
-        s["counter"] = <int>action?.payload;
+        "SET" => {
+            s["counter"] = <int>action?.payload;
+        }
     }
 
     return s;
