@@ -2,7 +2,7 @@
 #
 # + id - A unique identifier representing the action.
 # + payload - Extra data to pass to the reducer.
-public type Action record {
+public type ReduxAction record {
     string id;
     any payload?;
 };
@@ -12,24 +12,24 @@ public type Action record {
 # + state - The previous state.
 # + action - The action that is been dispatched.
 # + return - The new state.
-public type Reducer (function (any state, Action action) returns any);
+public type ReduxReducer (function (any state, ReduxAction action) returns any);
 
 # An anonymous function that listens to state changes.
 #
 # + state - The current state after reducing.
 # + return - Nothing.
-public type Subscriber (function (any state));
+public type ReduxSubscriber (function (any state));
 
 # An object that contains the state, subscribers and reducers.
 #
 # + currentState - The current state of this store instance.
 # + currentReducer - The anonymous function that effects state changes.
 # + subcribers - The list of anonymous functions that is listening to state changes.
-public type Store object {
+public type ReduxStore object {
     private any currentState;
-    private Reducer currentReducer;
-    private Subscriber[] subcribers = [];
-    private Action initAction = {
+    private ReduxReducer currentReducer;
+    private ReduxSubscriber[] subcribers = [];
+    private ReduxAction initAction = {
         id: "DEVHAMMED/REDUX_BAL@@INIT"
     };
 
@@ -37,7 +37,7 @@ public type Store object {
     #
     # + reducer - The anonymous function that effects state changes.
     # + initialState - The initial state of the store instance.
-    public function __init(Reducer reducer, any initialState = ()) {
+    public function __init(ReduxReducer reducer, any initialState = ()) {
         self.currentReducer = reducer;
         self.currentState = initialState;
         self.dispatch(self.initAction);
@@ -53,17 +53,17 @@ public type Store object {
     # Subscribe to state changes.
     #
     # + subscriber - An anonymous function that listens to state changes.
-    public function subscribe(Subscriber subscriber) {
+    public function subscribe(ReduxSubscriber subscriber) {
         self.subcribers.push(subscriber);
     }
 
     # Dispatch an action that changes the state.
     #
     # + action - record describing a state change.
-    public function dispatch(Action action) {
+    public function dispatch(ReduxAction action) {
         var reducer = self.getCurrentReducer();
         self.currentState = reducer(self.currentState, action);
-        self.subcribers.forEach(function (Subscriber sub) {
+        self.subcribers.forEach(function (ReduxSubscriber sub) {
             sub(self.currentState);
         });
     }
@@ -71,7 +71,7 @@ public type Store object {
     # Replace the store instance reducer.
     #
     # + reducer - The new state reducer.
-    public function replaceReducer(Reducer reducer) {
+    public function replaceReducer(ReduxReducer reducer) {
         self.currentReducer = reducer;
         self.dispatch(self.initAction);
     }
@@ -79,7 +79,7 @@ public type Store object {
     # Get the current store's reducer.
     #
     # + return - The anonymous function that effects state changes.
-    private function getCurrentReducer() returns Reducer {
+    private function getCurrentReducer() returns ReduxReducer {
         return self.currentReducer;
     }
 };

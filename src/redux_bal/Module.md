@@ -8,7 +8,7 @@ type State record {
     int counter;
 };
 
-function counterReducer(any state, Action action) returns State {
+function counterReducer(any state, ReduxAction action) returns State {
     var s = <State>state;
 
     match action.id {
@@ -29,9 +29,9 @@ function counterReducer(any state, Action action) returns State {
 }
 
 public function main() {
-  State initialState = {counter: 0};
+    State initialState = {counter: 0};
 
-    var store = new Store(counterReducer, initialState);
+    var store = new ReduxStore(counterReducer, initialState);
 
     store.subscribe(function (any state) {
         io:print("Current State: ");

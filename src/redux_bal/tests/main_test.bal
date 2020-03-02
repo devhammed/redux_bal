@@ -6,7 +6,7 @@ type State record {
     string name;
 };
 
-function counterReducer(any state, Action action) returns State {
+function counterReducer(any state, ReduxAction action) returns State {
     var s = <State>state;
 
     match action.id {
@@ -30,7 +30,7 @@ function counterReducer(any state, Action action) returns State {
 function testReducer() {
     State initialState = {counter: 0, name: "Reduxy"};
 
-    var store = new Store(counterReducer, initialState);
+    var store = new ReduxStore(counterReducer, initialState);
 
     store.subscribe(function (any state) {
         io:print("Current State: ");
